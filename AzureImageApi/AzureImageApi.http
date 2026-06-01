@@ -1,0 +1,6 @@
+@AzureImageApi_HostAddress = http://localhost:5123
+
+GET {{AzureImageApi_HostAddress}}/azureimages/
+Accept: application/json
+
+###

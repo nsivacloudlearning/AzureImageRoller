@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37314.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureImageApi", "AzureImageApi\AzureImageApi.csproj", "{AB9DB536-BC92-4413-BA76-DAC2B010658B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB9DB536-BC92-4413-BA76-DAC2B010658B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB9DB536-BC92-4413-BA76-DAC2B010658B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB9DB536-BC92-4413-BA76-DAC2B010658B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB9DB536-BC92-4413-BA76-DAC2B010658B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CB06D490-A910-408F-95CA-3194C767F868}
+	EndGlobalSection
+EndGlobal

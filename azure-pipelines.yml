@@ -67,5 +67,5 @@ stages:
       inputs:
         azureSubscription: 'AzureRM-ImgRoller'   # your service connection name
         appName: 'ImgRoller'                     # your App Service name
-        appType: 'webApp'                        # or webAppLinux if Linux
+        appType: 'webAppLinux'                        # or webAppLinux if Linux
         package: '$(Pipeline.Workspace)/drop/drop.zip'

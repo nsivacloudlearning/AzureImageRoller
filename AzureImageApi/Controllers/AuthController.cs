@@ -28,17 +28,23 @@ namespace AzureImageApi.Controllers
             new Claim(ClaimTypes.Name, model.Username)
         };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var jwtKey = _config["JwtKey"];
 
-            var token = new JwtSecurityToken(
-                issuer: _config["JwtIssuer"],
-                audience: _config["JwtAudience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: creds);
+            if (!string.IsNullOrEmpty(jwtKey))
+            {
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+                var token = new JwtSecurityToken(
+                    issuer: _config["JwtIssuer"],
+                    audience: _config["JwtAudience"],
+                    claims: claims,
+                    expires: DateTime.Now.AddHours(1),
+                    signingCredentials: creds);
+
+                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+            }
+            return BadRequest("JWT key not configured");
         }
     }
 }

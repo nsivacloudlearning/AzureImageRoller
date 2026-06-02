@@ -12,10 +12,14 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 var keyVaultUrl = builder.Configuration["KeyVaultUrl"];
 
 // Connect to Key Vault
-var keyVaultUri = new Uri(keyVaultUrl);
+if (keyVaultUrl != null)
+{
 
-var secretClient = new SecretClient(keyVaultUri, new DefaultAzureCredential());
-builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+    var keyVaultUri = new Uri(keyVaultUrl);
+
+    var secretClient = new SecretClient(keyVaultUri, new DefaultAzureCredential());
+    builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+}
 
 
 // Now you can safely read values: if they exist in Key Vault, they override appsettings.json

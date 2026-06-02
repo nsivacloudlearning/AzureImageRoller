@@ -55,6 +55,18 @@ namespace AzureImageApi.Controllers
             }
         }
 
+        [HttpDelete("{fileName}")]
+        public async Task<IActionResult> DeleteImage(string fileName)
+        {
+            var deleted = await _blobService.DeleteImage(fileName);
+            if (!deleted)
+            {
+                return NotFound(); // 404 if blob not found
+            }
+
+            return NoContent(); // 204 if deleted successfully
+        }
+
         [Authorize]
         [HttpGet("list")]
         public IActionResult List()

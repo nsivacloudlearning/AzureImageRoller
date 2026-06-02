@@ -1,6 +1,7 @@
 ﻿namespace AzureImageApi.Services
 {
     using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Specialized;
 
     public class BlobService
     {
@@ -24,6 +25,14 @@
             var blobClient = _containerClient.GetBlobClient(fileName);
             var response = await blobClient.DownloadAsync();
             return response.Value.Content;
+        }
+
+        public async Task<bool> DeleteImage(string fileName)
+        {
+            var blobClient = _containerClient.GetBlobClient(fileName);
+            
+            var response = await blobClient.DeleteIfExistsAsync();
+            return response.Value;
         }
 
         public IEnumerable<string> ListImages()

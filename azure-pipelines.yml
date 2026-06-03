@@ -62,7 +62,7 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
-    - script: dir $(System.DefaultWorkingDirectory)/drop
+    - script: dir "$(System.DefaultWorkingDirectory)\drop"
       displayName: 'List artifact contents'
     - task: AzureWebApp@1
       displayName: Deploy to Azure WebApp

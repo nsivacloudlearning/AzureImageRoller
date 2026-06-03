@@ -62,7 +62,7 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
-    - script: dir "$(System.DefaultWorkingDirectory)\drop"
+    - script: dir '$(Pipeline.Workspace)\drop'
       displayName: 'List artifact contents'
     - task: AzureWebApp@1
       displayName: Deploy to Azure WebApp
@@ -70,4 +70,4 @@ stages:
         azureSubscription: 'AzureRM-ImgRoller'   # your service connection name
         appName: 'ImgRoller'                     # your App Service name
         appType: 'webAppLinux'                        # or webAppLinux if Linux
-        package: '$(System.DefaultWorkingDirectory)/drop/drop.zip'
+        package: '$(Pipeline.Workspace)/drop/drop.zip'

@@ -62,8 +62,6 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
-    - script: dir '$(Pipeline.Workspace)\drop'
-      displayName: 'List artifact contents'
     - task: AzureWebApp@1
       displayName: Deploy to Azure WebApp
       inputs:

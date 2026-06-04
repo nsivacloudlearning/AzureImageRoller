@@ -50,7 +50,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: 'Create ZIP Package'
       inputs:
-        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/publish'
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/publish/AzureImageApi'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/drop.zip'

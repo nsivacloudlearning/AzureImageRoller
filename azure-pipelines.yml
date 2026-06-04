@@ -98,6 +98,5 @@ stages:
             displayName: 'Deploy to Azure Web App'
             inputs:
               azureSubscription: 'AzureRM-ImgRoller'
-              appName: 'ImgRoller'
-              appType: 'webAppLinux'
+              appName: 'ImgRoller'             
               package: '$(Pipeline.Workspace)/drop/drop.zip'

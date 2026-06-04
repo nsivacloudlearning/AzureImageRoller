@@ -1,44 +1,54 @@
 trigger:
   branches:
     include:
-      - master   # or main, depending on your repo
+      - master
 
 stages:
+
+# ==========================
+# Build Stage
+# ==========================
 - stage: Build
-  displayName: Build stage
+  displayName: Build Stage
+
   jobs:
   - job: BuildJob
-    displayName: Build
+    displayName: Build Application
+
     pool:
       vmImage: 'windows-latest'
+
     steps:
+
     - task: UseDotNet@2
+      displayName: 'Install .NET SDK'
       inputs:
         packageType: 'sdk'
-        version: '8.0.x'   # adjust to your .NET version
+        version: '8.0.x'
 
     - task: DotNetCoreCLI@2
-      displayName: Restore
+      displayName: 'Restore'
       inputs:
         command: 'restore'
         projects: '**/*.csproj'
 
     - task: DotNetCoreCLI@2
-      displayName: Build
+      displayName: 'Build'
       inputs:
         command: 'build'
         projects: '**/*.csproj'
         arguments: '--configuration Release'
 
     - task: DotNetCoreCLI@2
-      displayName: Publish
+      displayName: 'Publish'
       inputs:
         command: 'publish'
         projects: '**/*.csproj'
         arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: false
 
     - task: ArchiveFiles@2
-      displayName: Archive published files
+      displayName: 'Create ZIP Package'
       inputs:
         rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
         includeRootFolder: false
@@ -46,26 +56,48 @@ stages:
         archiveFile: '$(Build.ArtifactStagingDirectory)/drop.zip'
         replaceExistingArchive: true
 
-    - task: PublishBuildArtifacts@1
-      displayName: Publish Artifact
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Pipeline Artifact'
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'drop'
 
+
+# ==========================
+# Deploy Stage
+# ==========================
 - stage: Deploy
-  displayName: Deploy stage
+  displayName: Deploy Stage
   dependsOn: Build
+  condition: succeeded()
+
   jobs:
-  - job: DeployJob
-    displayName: Deploy
+  - deployment: DeployWebApp
+    displayName: Deploy to Azure Web App
+
     pool:
       vmImage: 'windows-latest'
-    steps:
-    - task: AzureWebApp@1
-      displayName: Deploy to Azure WebApp
-      inputs:
-        azureSubscription: 'AzureRM-ImgRoller'   # your service connection name
-        appName: 'ImgRoller'                     # your App Service name
-        appType: 'webAppLinux'                        # or webAppLinux if Linux
-        package: '$(Pipeline.Workspace)/drop/drop.zip'
+
+    environment: 'Production'
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - download: current
+            artifact: drop
+
+          - powershell: |
+              Write-Host "Pipeline Workspace:"
+              Write-Host "$(Pipeline.Workspace)"
+              Get-ChildItem -Path "$(Pipeline.Workspace)" -Recurse
+            displayName: 'Verify Artifact Location'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy to Azure Web App'
+            inputs:
+              azureSubscription: 'AzureRM-ImgRoller'
+              appName: 'ImgRoller'
+              appType: 'webAppLinux'
+              package: '$(Pipeline.Workspace)/drop/drop.zip'

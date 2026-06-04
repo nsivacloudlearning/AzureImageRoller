@@ -92,8 +92,9 @@ stages:
               Write-Host "Pipeline Workspace:"
               Write-Host "$(Pipeline.Workspace)"
               Get-ChildItem -Path "$(Pipeline.Workspace)" -Recurse
-            displayName: 'Verify Artifact Location'
-
+              Test-Path "$(Pipeline.Workspace)\drop\drop.zip"
+            displayName: 'Verify Package'
+            
           - task: AzureWebApp@1
             displayName: 'Deploy to Azure Web App'
             inputs:
